@@ -1,3 +1,44 @@
+# Active Directory Home Lab
+
+A fully functional Windows Active Directory environment built on Oracle VirtualBox, simulating a small corporate network with a Domain Controller, DHCP, DNS, NAT routing, and a Windows 10 client joined to the domain. Over 1,000 user accounts were bulk-provisioned via PowerShell automation.
+
+---
+
+## Environment Overview
+
+| Component | Details |
+|---|---|
+| Hypervisor | Oracle VirtualBox |
+| Domain Controller OS | Windows Server 2019 Evaluation |
+| Client OS | Windows 10 Pro |
+| Domain Name | mydomain.com |
+| Internal IP Scheme | 172.16.0.0/24 |
+| DC Internal IP | 172.16.0.1 |
+| DHCP Scope | 172.16.0.100 - 172.16.0.200 |
+
+---
+
+## Network Architecture
+
+```
+Internet
+    |
+[NAT Adapter] <-- DC External NIC (DHCP from home router)
+    |
+[Domain Controller - Windows Server 2019]
+    - Active Directory Domain Services
+    - DNS Server
+    - DHCP Server (172.16.0.100-200)
+    - RAS / NAT (routes internal traffic to internet)
+    |
+[Internal VirtualBox Network]
+    |
+[CLIENT1 - Windows 10 Pro]
+    - Joined to mydomain.com
+    - Gets IP from DC DHCP
+    - Uses DC as DNS and default gateway
+```
+
 ---
 
 ## Lab Build Steps
@@ -75,7 +116,7 @@ Authorized the DHCP server in Active Directory after setup.
 
 ### Step 7: PowerShell Bulk User Creation
 
-Wrote and executed a PowerShell script to automatically create over 1,000 user accounts in Active Directory, pulling names from a plain text file (names.txt). Personal account suribe was added to the top of the names list.
+Executed a PowerShell script to automatically create over 1,000 user accounts in Active Directory, pulling names from a plain text file (names.txt). Personal account suribe was added to the top of the names list.
 
 **Script breakdown:**
 
@@ -98,7 +139,7 @@ foreach ($n in $USER_FIRST_LAST_LIST) {
                -Name $username `
                -EmployeeID $username `
                -PasswordNeverExpires $true `
-               -Path "ou=_USERS,$((([ADSI]"").distinguishedName))" `
+               -Path "ou=_USERS,$((([ADSI]'').distinguishedName))" `
                -Enabled $true
 }
 ```
@@ -126,3 +167,55 @@ Created a second VM (CLIENT1) in VirtualBox configured with only one network ada
 ### Step 9: Domain Join and Connectivity Verification
 
 Renamed the machine to CLIENT1 and joined it to mydomain.com simultaneously via System > Rename this PC (Advanced). Verified full connectivity from CLIENT1 via Command Prompt:
+
+```
+ipconfig        --> 172.16.0.100, gateway 172.16.0.1, DNS suffix mydomain.com
+ping google.com --> successful (confirms NAT routing working end-to-end)
+ping mydomain.com --> successful (confirms DNS resolving through DC)
+whoami          --> mydomain\suribe (confirms domain login working)
+```
+
+![ipconfig and ping google.com](screenshots/client1-ipconfig-ping-google.png)
+![ping mydomain.com](screenshots/client1-ping-mydomain.png)
+![whoami - mydomain\suribe](screenshots/client1-whoami-domain-user.png)
+
+---
+
+## Key Concepts Demonstrated
+
+**Active Directory** - Created a domain, Organizational Units, security groups, and bulk user provisioning via PowerShell automation.
+
+**DNS** - DC serves as the authoritative DNS server for the internal domain. Clients resolve both internal hostnames and external domains through it.
+
+**DHCP** - Scoped address assignment for internal clients with correct gateway and DNS options pushed automatically.
+
+**NAT / Routing** - Internal clients on a private 172.16.0.0/24 network reach the public internet through the DC acting as a router, with the external IP NATed to the home network.
+
+**PowerShell Automation** - Bulk provisioned 1,000+ AD user accounts programmatically from a flat text file, demonstrating real-world IT automation patterns.
+
+**Domain Join** - CLIENT1 joined to mydomain.com, allowing any of the 1,000+ provisioned domain accounts to authenticate on the machine.
+
+---
+
+## Tools and Technologies
+
+- Oracle VirtualBox
+- Windows Server 2019
+- Windows 10 Pro
+- Active Directory Domain Services (AD DS)
+- DNS Server
+- DHCP Server
+- Remote Access / NAT
+- Windows PowerShell ISE
+
+---
+
+## Acknowledgments
+
+Lab environment based on the Active Directory home lab tutorial by [Josh Madakor](https://www.youtube.com/@JoshMadakor). All configuration, documentation, and screenshots are my own work following his guided project.
+
+---
+
+## Author
+
+Sebastian Uribe | [LinkedIn](https://www.linkedin.com/in/s1uribe/) | MIS Student, George Mason University

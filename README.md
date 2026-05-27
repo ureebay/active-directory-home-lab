@@ -51,9 +51,9 @@ Created the Domain Controller VM in VirtualBox with two network adapters:
 
 Allocated 2048 MB RAM and 4 CPU cores, then booted from the Windows Server 2019 ISO and completed a clean install with the Desktop Experience option.
 
-![DC VM Setup](screenshots/dc-virtualbox-settings.png)
-![Server 2019 Installing](screenshots/dc-server2019-installing.png)
-![Admin Password Setup](screenshots/server2019-admin-password-setup.png)
+![DC VM Setup](screenshots/dc-virtualbox-settings.png.png)
+![Server 2019 Installing](screenshots/dc-server2019-installing.png.png)
+![Admin Password Setup](screenshots/server2019-admin-password-setup.png.png)
 
 ---
 
@@ -67,8 +67,8 @@ Manually assigned a static IP to the internal NIC:
 - Default Gateway: (none, DC is the gateway)
 - DNS: 127.0.0.1 (loopback, DC serves as its own DNS after AD install)
 
-![External NIC - Internet](screenshots/nic-external-internet-details.png)
-![Internal NIC - 169.254 Autoconfig](screenshots/nic-internal-169-autoconfig.png)
+![External NIC - Internet](screenshots/nic-external-internet-details.png.png)
+![Internal NIC - 169.254 Autoconfig](screenshots/nic-internal-169-autoconfig.png.png)
 
 ---
 
@@ -76,8 +76,8 @@ Manually assigned a static IP to the internal NIC:
 
 Installed the Active Directory Domain Services role via Server Manager > Add Roles and Features. After installation completed, ran the post-deployment configuration to promote the server to a Domain Controller and created a new forest with the domain name mydomain.com.
 
-![AD DS Role Installation](screenshots/adds-role-installation.png)
-![AD DS Configuration Wizard](screenshots/adds-configuration-wizard.png)
+![AD DS Role Installation](screenshots/adds-role-installation.png.png)
+![AD DS Configuration Wizard](screenshots/adds-configuration-wizard.png.png)
 
 ---
 
@@ -85,7 +85,7 @@ Installed the Active Directory Domain Services role via Server Manager > Add Rol
 
 Instead of using the built-in Administrator account, created a dedicated domain admin account following a real-world naming convention (a-suribe), placed inside a custom _ADMINS Organizational Unit. Added the account to the Domain Admins security group via Member Of > Add.
 
-![Creating Domain Admin Account](screenshots/ad-create-domain-admin-user.png)
+![Creating Domain Admin Account](screenshots/ad-create-domain-admin-user.png.png)
 
 ---
 
@@ -93,8 +93,8 @@ Instead of using the built-in Administrator account, created a dedicated domain 
 
 Installed the Remote Access role (with the Routing sub-role) to enable NAT, allowing the internal Windows 10 client to reach the internet through the Domain Controller. Configured the _INTERNET_ adapter as the public interface.
 
-![Remote Access Role Installation](screenshots/remote-access-role-installation.png)
-![NAT Interface Selection](screenshots/nat-interface-selection.png)
+![Remote Access Role Installation](screenshots/remote-access-role-installation.png.png)
+![NAT Interface Selection](screenshots/nat-interface-selection.png.png)
 
 ---
 
@@ -110,7 +110,7 @@ Installed the DHCP Server role and configured a scope to automatically assign IP
 
 Authorized the DHCP server in Active Directory after setup.
 
-![DHCP Scope Configured](screenshots/dhcp-scope-configured.png)
+![DHCP Scope Configured](screenshots/dhcp-scope-configured.png.png)
 
 ---
 
@@ -149,9 +149,9 @@ Before running, set execution policy to unrestricted:
 Set-ExecutionPolicy Unrestricted
 ```
 
-![PowerShell Script Open in ISE](screenshots/powershell-script-open.png)
-![Users Being Created in Output](screenshots/powershell-users-being-created.png)
-![AD Users and Computers - _USERS OU Populated](screenshots/ad-users-ou-populated.png)
+![PowerShell Script Open in ISE](screenshots/powershell-script-open.png.png)
+![Users Being Created in Output](screenshots/powershell-users-being-created.png.png)
+![AD Users and Computers - _USERS OU Populated](screenshots/ad-users-ou-populated.png.png)
 
 ---
 
@@ -159,8 +159,8 @@ Set-ExecutionPolicy Unrestricted
 
 Created a second VM (CLIENT1) in VirtualBox configured with only one network adapter set to Internal Network, so it receives its IP address from the DC's DHCP server. Installed Windows 10 Pro (required for domain join; Home edition cannot join a domain).
 
-![Windows 10 Installing](screenshots/client1-windows10-installing.png)
-![Local User Setup](screenshots/client1-local-user-setup.png)
+![Windows 10 Installing](screenshots/client1-windows10-installing.png.png)
+![Local User Setup](screenshots/client1-local-user-setup.png.png)
 
 ---
 
@@ -175,9 +175,9 @@ ping mydomain.com --> successful (confirms DNS resolving through DC)
 whoami          --> mydomain\suribe (confirms domain login working)
 ```
 
-![ipconfig and ping google.com](screenshots/client1-ipconfig-ping-google.png)
-![ping mydomain.com](screenshots/client1-ping-mydomain.png)
-![whoami - mydomain\suribe](screenshots/client1-whoami-domain-user.png)
+![ipconfig and ping google.com](screenshots/client1-ipconfig-ping-google.png.png)
+![ping mydomain.com](screenshots/client1-ping-mydomain.png.png)
+![whoami - mydomain\suribe](screenshots/client1-whoami-domain-user.png.png)
 
 ---
 
@@ -214,6 +214,11 @@ whoami          --> mydomain\suribe (confirms domain login working)
 
 Lab environment based on the Active Directory home lab tutorial by [Josh Madakor](https://www.youtube.com/@JoshMadakor). All configuration, documentation, and screenshots are my own work following his guided project.
 
+---
+
+## Author
+
+Sebastian Uribe | [LinkedIn](https://www.linkedin.com/in/s1uribe/) | MIS Student, George Mason University
 ---
 
 ## Author

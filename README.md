@@ -219,8 +219,3 @@ Lab environment based on the Active Directory home lab tutorial by [Josh Madakor
 ## Author
 
 Sebastian Uribe | [LinkedIn](https://www.linkedin.com/in/s1uribe/) | MIS Student, George Mason University
----
-
-## Author
-
-Sebastian Uribe | [LinkedIn](https://www.linkedin.com/in/s1uribe/) | MIS Student, George Mason University
